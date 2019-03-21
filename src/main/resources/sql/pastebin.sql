@@ -11,7 +11,9 @@ create table `document` (
   `url_id` int(10) unsigned NOT NULL,
   `doc_text` TEXT,
   `is_image` TINYINT(1) NOT NULL,
-  `image_directory` varchar(100),
+  `is_file` TINYINT(1) NOT NULL,
+  `directory` varchar(100),
+  `updated_at`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(`id`),
   CONSTRAINT `FK_document_url` FOREIGN KEY (`url_id`) REFERENCES `url` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -65,6 +67,3 @@ CREATE TABLE `user_url` (
   CONSTRAINT `user_url_user_fk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
   CONSTRAINT `user_url_url_fk_1` FOREIGN KEY (`url_id`) REFERENCES `url` (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
-
-
-
