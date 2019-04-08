@@ -1,3 +1,14 @@
+CREATE TABLE `project_property` (
+  `id`         INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name`       VARCHAR(100)      NOT NULL,
+  `value`      VARCHAR(80)      NOT NULL,
+  `updated_at` TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `is_active`    TINYINT(1)       NOT NULL,
+  `created_at` TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
 create table `url` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `tiny_uri` varchar(7) NOT NULL,
