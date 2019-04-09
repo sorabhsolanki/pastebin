@@ -1,15 +1,14 @@
 [
   {
-
   "id" : 101,
   "name" : "inMemory"
  },
   {
     "id" : 102,
-    "name" : "redis"
+    "name" : "redisHandler"
   },
   {
     "id" : 103,
-    "name" : "aerospike"
+    "name" : "aerospikeHandler"
   }
 ]

@@ -48,11 +48,14 @@ APIs
       --> core
       --> dao
 
-   pasteApiGateway {another Spring Boot + Thymeleaf project}
-    It will be an MVC project which thymeleaf(i.e. fronted will talk to). EndUser will interact to this project, all the
-    backend APIs i.e. exposed at pastebackend will be called from this pasteApiGateway.
+   pasteApiGateway {another Spring Boot project for API gateway}
+    Its an API gateway for all the backend APIs i.e. exposed at pastebackend.  All APIs will be called from this pasteApiGateway.
+
+   pasteFrontEnd { spring boot + Thymeleaf project}
+     It will be an MVC project with thymeleaf. EndUser will interact to this project. This will talk to pasteApiGateway.
 
 # APIFlow
-   API pasteit/api/fileUpload and pasteit/api/text will gwt called in parallel or either one of them will be called according
-   to the uploaded information by user. These apis will return the docId. This docId will be provided as input to
-   pasteit/api/tag API from apiGateway for tagging the above uploaded details.
+   API pasteit/api/fileUpload and pasteit/api/text will get called in parallel or either one of them will be called according
+   to the uploaded information by user.
+   These apis will return the docId. This docId will be provided as input to pasteit/api/tag API from apiGateway for
+   tagging the above uploaded details.
