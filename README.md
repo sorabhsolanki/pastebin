@@ -9,7 +9,7 @@ Currently all information are public{no support for user management as of now}.
 
 Entities
 --------
-url --> contains the url. One url can be mapped to multiple documents. {since user can upload multi infomation on same page and then requequest for url.}
+url --> contains the url. One url can be mapped to multiple documents. {since user can upload multi information on same page and then request for url.}
 document --> contains the document, it can be text/link/file/image, In case of file and image document store the actual directory location.
 document_tag --> contains the info which tag is mapped to which document.
 tag --> contains the tag information.
