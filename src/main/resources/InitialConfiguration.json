@@ -1,0 +1,26 @@
+{
+  "cache": [
+    {
+      "name": "inMemory",
+      "enable": "true"
+    },
+    {
+      "name": "redisHandler",
+      "enable": "true"
+    },
+    {
+      "name": "aerospikeHandler",
+      "enable": "false"
+    }
+  ],
+  "fileStorage": [
+    {
+      "name": "simpleDirectory",
+      "enable": "true"
+    },
+    {
+      "name": "mongoDBGridFS",
+      "enable": "false"
+    }
+  ]
+}

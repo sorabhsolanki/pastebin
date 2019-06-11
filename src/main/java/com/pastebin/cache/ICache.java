@@ -1,4 +1,4 @@
-package com.pastebin.cache.objects;
+package com.pastebin.cache;
 
 /**
  */

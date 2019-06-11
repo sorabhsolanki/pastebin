@@ -33,4 +33,9 @@ public class ProjectPropertyRepository {
         List<ProjectPropertyEntity> list = query.getResultList();
         return CollectionUtils.isEmpty(list) ? Collections.emptyList() : list;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

@@ -4,6 +4,8 @@ package com.pastebin.util;
  */
 public interface CacheConstants {
 
-    String ACTIVE_CACHE_PROVIDER = "enable.cache.provider";
+    String CACHE_IN_MEMORY = "inMemory";
+    String CACHE_DISTRIBUTED_REDIS = "redisHandler";
+    String CACHE_DISTRIBUTED_AEROSPIKE = "aerospikeHandler";
 
 }

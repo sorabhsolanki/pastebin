@@ -1,1 +1,1 @@
-INSERT INTO `project_property`(`name`, `value`, `is_active`) values('enable.cache.provider', '102', 1);
+INSERT INTO `project_property`(`name`, `value`, `is_active`) values('enable.distributed.cache.provider', 'inMemory', 1);

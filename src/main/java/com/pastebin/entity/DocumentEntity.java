@@ -28,6 +28,10 @@ public class DocumentEntity {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "")
+    private UrlEntity uri;
+
     public long getId() {
         return id;
     }
