@@ -7,4 +7,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DistributedCacheProvider implements ICache{
+
+    @Override
+    public Object getCache() {
+        return null;
+    }
 }
