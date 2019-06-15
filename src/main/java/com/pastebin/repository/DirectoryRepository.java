@@ -1,7 +1,7 @@
 package com.pastebin.repository;
 
+import com.pastebin.entity.DirectoryEntity;
 import com.pastebin.entity.ProjectPropertyEntity;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -21,26 +20,23 @@ import java.util.List;
  */
 @Repository
 @Transactional
-public class ProjectPropertyRepository {
+public class DirectoryRepository {
 
     private final SessionFactory sessionFactory;
 
     @Autowired
-    public ProjectPropertyRepository(SessionFactory sessionFactory) {
+    public DirectoryRepository(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
-    public List<ProjectPropertyEntity> getAll(boolean isActive){
+    public List<DirectoryEntity> getAll(){
 
         Session session = sessionFactory.getCurrentSession();
-
         CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<ProjectPropertyEntity> criteriaQuery = builder.createQuery(ProjectPropertyEntity.class);
-        Root<ProjectPropertyEntity> myObjectRoot = criteriaQuery.from(ProjectPropertyEntity.class);
-        criteriaQuery.select(myObjectRoot).where(builder.equal(myObjectRoot.get("isActive"), isActive));
+        CriteriaQuery<DirectoryEntity> criteriaQuery = builder.createQuery(DirectoryEntity.class);
+        Query<DirectoryEntity> query =session.createQuery(criteriaQuery);
 
-        Query<ProjectPropertyEntity> query =session.createQuery(criteriaQuery);
-        List<ProjectPropertyEntity> list = query.getResultList();
+        List<DirectoryEntity> list = query.getResultList();
         return CollectionUtils.isEmpty(list) ? Collections.emptyList() : list;
     }
 

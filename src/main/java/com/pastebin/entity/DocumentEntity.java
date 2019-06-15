@@ -32,6 +32,10 @@ public class DocumentEntity {
     @JoinColumn(name = "")
     private UrlEntity uri;
 
+    @OneToOne
+    @JoinColumn(name = "directory_id")
+    private DirectoryEntity directoryEntity;
+
     public long getId() {
         return id;
     }
@@ -78,5 +82,13 @@ public class DocumentEntity {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public DirectoryEntity getDirectoryEntity() {
+        return directoryEntity;
+    }
+
+    public void setDirectoryEntity(DirectoryEntity directoryEntity) {
+        this.directoryEntity = directoryEntity;
     }
 }

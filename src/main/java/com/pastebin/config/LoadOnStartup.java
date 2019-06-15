@@ -4,11 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pastebin.cache.CacheManager;
 import com.pastebin.cache.CacheProviderFactory;
 import com.pastebin.cache.ICache;
+import com.pastebin.cache.objects.impl.DirectoryCache;
 import com.pastebin.cache.objects.impl.ProjectPropertyCache;
+import com.pastebin.entity.DirectoryEntity;
 import com.pastebin.entity.ProjectPropertyEntity;
 import com.pastebin.exception.GeneralException;
 import com.pastebin.handler.StorageFactory;
 import com.pastebin.service.AbstractFileStorage;
+import com.pastebin.service.DirectoryService;
 import com.pastebin.service.FileStorageService;
 import com.pastebin.service.ProjectPropertyService;
 import com.pastebin.service.provider.IStorage;
@@ -37,20 +40,23 @@ public class LoadOnStartup {
     private final CacheProviderFactory cacheProviderFactory;
     private final StorageFactory storageFactory;
     private final ProjectPropertyService propertyService;
+    private final DirectoryService directoryService;
     private Map<String, ICache> cacheMap;
     private Map<String, IStorage> storageMap;
 
     @Autowired
     public LoadOnStartup(CacheProviderFactory cacheProviderFactory, StorageFactory storageFactory,
-                         ProjectPropertyService propertyService) {
+                         ProjectPropertyService propertyService, DirectoryService directoryService) {
         this.cacheProviderFactory = cacheProviderFactory;
         this.storageFactory = storageFactory;
         this.propertyService = propertyService;
+        this.directoryService = directoryService;
     }
 
     @PostConstruct
     public void init() {
         initializeAndPopulateConfigJsonValues();
+        loadPropertyValue();
         loadPropertyValue();
     }
 
@@ -95,6 +101,16 @@ public class LoadOnStartup {
             propertyCache.insert(propertyEntity.getName(), propertyEntity.getValue());
         }
         cacheManager.set(propertyCache);
+    }
+
+    private void initializeDirectoryCache() {
+        LOG.info(":: Initializing in-memory cache for directory locations ::");
+        List<DirectoryEntity> directoryEntities = directoryService.getAllDirectoryLocations();
+        DirectoryCache directoryCache = new DirectoryCache(cacheMap.get(CacheConstants.CACHE_IN_MEMORY));
+        for (DirectoryEntity directoryEntity : directoryEntities) {
+            directoryCache.insert(directoryEntity.getLocation(), "");
+        }
+        cacheManager.set(directoryCache);
     }
 
     private static class InitialConfiguration{
