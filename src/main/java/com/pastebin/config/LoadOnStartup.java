@@ -57,7 +57,7 @@ public class LoadOnStartup {
     public void init() {
         initializeAndPopulateConfigJsonValues();
         loadPropertyValue();
-        loadPropertyValue();
+        initializeDirectoryCache();
     }
 
 

@@ -29,26 +29,23 @@ public class FileStorageProvider implements IStorage{
 
     private static final Logger LOG = LoggerFactory.getLogger(FileStorageService.class);
 
-    private final Path fileStorageLocation;
+    private final FileStorageProperties fileStorageProperties;
     private final ApplicationContext applicationContext;
     private final IExecutor executor;
 
     @Autowired
     public FileStorageProvider(FileStorageProperties fileStorageProperties, ApplicationContext applicationContext,
                                @Qualifier("executorImpl") IExecutor executor) {
-        this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
-                .toAbsolutePath().normalize();
+        this.fileStorageProperties = fileStorageProperties;
         this.applicationContext = applicationContext;
         this.executor = executor;
-        try {
-            Files.createDirectories(this.fileStorageLocation);
-        } catch (Exception ex) {
-            throw new RuntimeException("Could not create the directory where the uploaded files will be stored.", ex);
-        }
     }
 
     @Override
     public String storeFile(MultipartFile file) {
+        Path fileStorageLocation = Paths.get(fileStorageProperties.getStorageLocation())
+                .toAbsolutePath().normalize();
+        createDirectoryIfNotExist(fileStorageLocation);
         LOG.info("File will be saved on : " + fileStorageLocation);
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         if (fileName.contains("..")) {
@@ -58,18 +55,32 @@ public class FileStorageProvider implements IStorage{
         return executor.executeTask(task);
     }
 
+
+    //TODO : here fileStorageLocation will be fetched from the DB. rewrite the logic
     @Override
     public Resource loadFileAsResource(String fileName) {
         try {
-            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+            /*Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists()) {
                 return resource;
             } else {
                 throw new RuntimeException("File not found " + fileName);
-            }
+            }*/
+
+            return new UrlResource("remove this line after writing the logic.");
         } catch (MalformedURLException ex) {
             throw new RuntimeException("File not found " + fileName, ex);
+        }
+
+
+    }
+
+    private void createDirectoryIfNotExist(final Path fileStorageLocation) {
+        try {
+            Files.createDirectories(fileStorageLocation);
+        } catch (Exception ex) {
+            throw new RuntimeException("Could not create the directory where the uploaded files will be stored.", ex);
         }
     }
 }

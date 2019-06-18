@@ -5,7 +5,14 @@ import com.pastebin.annotation.Cache;
 import com.pastebin.cache.ICache;
 import com.pastebin.cache.objects.AbstractInMemoryCache;
 
+import java.util.Set;
+
 /**
+ * Class for holding directory location names
+ *
+ *   key                 value
+ * ------------       -------------
+ *  locationName          ""         // no need to keep any value
  */
 @Cache(name = "directoryCache")
 public class DirectoryCache extends AbstractInMemoryCache {
@@ -22,6 +29,14 @@ public class DirectoryCache extends AbstractInMemoryCache {
     @Override
     public String get(final String key){
         return getCacheStorage().get(key);
+    }
+
+    public int getSize(){
+        return getCacheStorage().size();
+    }
+
+    public Set<String> getAllKeys(){
+        return getCacheStorage().keySet();
     }
 }
 

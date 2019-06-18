@@ -1,21 +1,38 @@
 package com.pastebin.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import com.pastebin.cache.CacheManager;
+import com.pastebin.cache.objects.impl.DirectoryCache;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  */
-@Configuration
-@ConfigurationProperties(prefix = "file")
+@Service
 public class FileStorageProperties {
 
-    private String uploadDir;
+    private final CacheManager cacheManager;
+    private final Random random;
+    private final int codec = 10000;
 
-    public String getUploadDir() {
-        return uploadDir;
+    private final DirectoryCache directoryCache;
+    private List<String> locations;
+
+    public FileStorageProperties() {
+        this.cacheManager = CacheManager.getInstance();
+        this.random = new Random();
+        this.directoryCache = cacheManager.getCache(DirectoryCache.class);
+        initializeLocations();
     }
 
-    public void setUploadDir(String uploadDir) {
-        this.uploadDir = uploadDir;
+    public String getStorageLocation(){
+        return locations.get(random.nextInt(codec) % directoryCache.getSize());
+    }
+
+    private void initializeLocations() {
+        locations = new ArrayList<>(directoryCache.getSize());
+        directoryCache.getAllKeys().forEach(key -> locations.add(key));
     }
 }
