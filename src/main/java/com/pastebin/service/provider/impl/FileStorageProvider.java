@@ -42,7 +42,7 @@ public class FileStorageProvider implements IStorage{
     }
 
     @Override
-    public String storeFile(MultipartFile file) {
+    public String storeFile(final MultipartFile file, final String docID) {
         Path fileStorageLocation = Paths.get(fileStorageProperties.getStorageLocation())
                 .toAbsolutePath().normalize();
         createDirectoryIfNotExist(fileStorageLocation);
@@ -52,6 +52,7 @@ public class FileStorageProvider implements IStorage{
             throw new RuntimeException("Sorry! Filename contains invalid path sequence " + fileName);
         }
         ITask task = new SaveOnDirectory(applicationContext, file, fileStorageLocation, fileName);
+        task.setDocID(docID);
         return executor.executeTask(task);
     }
 

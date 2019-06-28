@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Class responsible for doing DB operation on table 'directory'
  */
 @Repository
 @Transactional
@@ -29,6 +30,9 @@ public class DirectoryRepository {
         this.sessionFactory = sessionFactory;
     }
 
+    /*
+     method for get all directory locations from DB, these location will be used for holding files.
+     */
     public List<DirectoryEntity> getAll(){
 
         Session session = sessionFactory.getCurrentSession();

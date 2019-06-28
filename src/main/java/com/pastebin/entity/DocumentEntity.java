@@ -13,6 +13,9 @@ public class DocumentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name = "document_id")
+    private String documentId;
+
     @Column(name = "doc_text")
     private String documentText;
 
@@ -22,7 +25,13 @@ public class DocumentEntity {
     @Column(name = "is_file")
     private boolean file;
 
-    @Column(name = "directory")
+    @Column(name = "file_size")
+    private String fileSize;
+
+    @Column(name = "file_extension")
+    private String fileExtension;
+
+    @Column(name = "directory_location")
     private String directoryPath;
 
     @Column(name = "updated_at")
@@ -42,6 +51,14 @@ public class DocumentEntity {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 
     public String getDocumentText() {
@@ -90,5 +107,29 @@ public class DocumentEntity {
 
     public void setDirectoryEntity(DirectoryEntity directoryEntity) {
         this.directoryEntity = directoryEntity;
+    }
+
+    public String getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(String fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
+    }
+
+    public UrlEntity getUri() {
+        return uri;
+    }
+
+    public void setUri(UrlEntity uri) {
+        this.uri = uri;
     }
 }

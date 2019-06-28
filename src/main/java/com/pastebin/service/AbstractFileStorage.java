@@ -22,7 +22,7 @@ public abstract class AbstractFileStorage {
         return storageMap.get(CacheConstants.FILE_STORAGE);
     }
 
-    public abstract String storeFileOnDirectory(MultipartFile file);
+    public abstract String storeFileOnDirectory(MultipartFile file, String docID);
 
     public abstract Resource loadFileAsResource(String fileName);
 }

@@ -2,6 +2,7 @@ package com.pastebin.executor.worker.impl;
 
 import com.pastebin.executor.ExecutorTaskResult;
 import com.pastebin.executor.worker.ITask;
+import com.pastebin.repository.DocumentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -32,15 +33,26 @@ public class SaveOnDirectory extends ITask {
         this.fileName = fileName;
     }
 
+    /*
+       TODO:
+       method will do the following operations:
+       1. copy the content of multipart file inside the directory.
+       2. check whether the provided docID is present inside the DB.
+       3. update information like is_file, is_image, file_size, file_extension, directory_location
+     */
     @Override
     protected void process() {
         ExecutorTaskResult executorTaskResult = applicationContext.getBean(ExecutorTaskResult.class);
+        DocumentRepository documentRepository = applicationContext.getBean(DocumentRepository.class);
+
         try {
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             LOG.info("File uploaded with file name : " + fileName);
             executorTaskResult.insert(getReferenceId(), new ExecutorTaskResult.ResultDto(HttpStatus.OK,
                     "Successfully uploaded.", fileName, file.getSize(), ExecutorTaskResult.Storage.FILE));
+
+
         } catch (IOException e) {
             executorTaskResult.insert(getReferenceId(), new ExecutorTaskResult.ResultDto(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Could not store file due to : " + e.getMessage()));

@@ -23,8 +23,8 @@ public class FileStorageHandler {
         this.executorTaskResult = executorTaskResult;
     }
 
-    public String upload(final MultipartFile file){
-        return fileStorageService.storeFileOnDirectory(file);
+    public String upload(final MultipartFile file, final String docID){
+        return fileStorageService.storeFileOnDirectory(file, docID);
     }
 
     public UploadFileResponse getUploadResponse(final String referenceId){

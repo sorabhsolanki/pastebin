@@ -28,9 +28,9 @@ public class FileController {
     }
 
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("docID") final String docID) {
         LOG.info(String.format("Request received for upload file with file name %s", file.getOriginalFilename()));
-        String referenceId = fileStorageHandler.upload(file);
+        String referenceId = fileStorageHandler.upload(file, docID);
         String fileStatusUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/checkStatus/")
                 .path(referenceId)

@@ -8,6 +8,8 @@ public abstract class ITask implements Runnable{
 
     private final String referenceId = UUID.randomUUID().toString();
 
+    private String docID;
+
     @Override
     public void run() {
         process();
@@ -17,5 +19,13 @@ public abstract class ITask implements Runnable{
 
     public String getReferenceId() {
         return referenceId;
+    }
+
+    public String getDocID() {
+        return docID;
+    }
+
+    public void setDocID(String docID) {
+        this.docID = docID;
     }
 }

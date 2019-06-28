@@ -17,6 +17,7 @@ create table `url` (
   UNIQUE KEY `uri` (`uri`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- table for keeping all directory that can be used for holding files.
 create table `directory` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `location` varchar(200) NOT NULL,
@@ -26,16 +27,19 @@ create table `directory` (
 
 create table `document` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `document_id` varchar(40) NOT NULL,
   `url_id` int(10) unsigned NOT NULL,
   `doc_text` TEXT,
   `is_image` TINYINT(1) NOT NULL,
   `is_file` TINYINT(1) NOT NULL,
-  `directory_id` int(10) unsigned NOT NULL,
+  `file_size` int(3),
+  `file_extension` varchar(5),
+  `directory_location` varchar(200),
   `updated_at`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(`id`),
-  CONSTRAINT `FK_document_url` FOREIGN KEY (`url_id`) REFERENCES `url` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_document_doc_id` FOREIGN KEY (`directory_id`) REFERENCES `document` (`directory_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  UNIQUE KEY `document_id` (`document_id`),
+  CONSTRAINT `FK_document_url` FOREIGN KEY (`url_id`) REFERENCES `url` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table `tag` (

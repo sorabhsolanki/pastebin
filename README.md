@@ -43,7 +43,7 @@ APIs
    This API will support pagination
 
 
-# projects : no. of projects will be 2
+# projects : no. of projects will be 3
 
    pastebackend  {it will be a Spring Boot project}
       --> api
@@ -57,7 +57,13 @@ APIs
      It will be an MVC project with thymeleaf. EndUser will interact to this project. This will talk to pasteApiGateway.
 
 # APIFlow
-   API pasteit/api/fileUpload and pasteit/api/text will get called in parallel or either one of them will be called according
-   to the uploaded information by user.
-   These apis will return the docId. This docId will be provided as input to pasteit/api/tag API from apiGateway for
-   tagging the above uploaded details.
+   1. API pasteit/api/fileUpload and pasteit/api/text will get called in parallel or either one of them will be called according
+   to the uploaded information by user. These apis will return the docId. 
+   
+   2. This docId will be provided as input to pasteit/api/tag API from apiGateway for tagging the above uploaded details.
+   
+   **For case 1: If both APIs get called in parallel for a single user request, then how will they share the same DocID ?**
+   Sol: Make the docId upfront via UUID or custom generator, and then assign this docID to both the API request. The generation and assigning of docID can be done at API gateway.
+     Every API will first check whether this docID has been present at DB, if yes then fire update query else fire insert query. If insert query got failed then retry mechanism should be in place.  
+   
+   

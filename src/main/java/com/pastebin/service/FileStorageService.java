@@ -15,8 +15,8 @@ public class FileStorageService extends AbstractFileStorage{
     }
 
     @Override
-    public String storeFileOnDirectory(final MultipartFile file) {
-        return getFileStorageProvider().storeFile(file);
+    public String storeFileOnDirectory(final MultipartFile file, final String docID) {
+        return getFileStorageProvider().storeFile(file, docID);
     }
 
     @Override
