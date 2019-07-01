@@ -1,9 +1,15 @@
 package com.pastebin.repository;
 
+import com.pastebin.entity.DocumentEntity;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 /**
@@ -18,6 +24,18 @@ public class DocumentRepository {
     @Autowired
     public DocumentRepository(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+
+    public boolean isDocIdPresent(final String docID){
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<DocumentEntity> criteriaQuery = builder.createQuery(DocumentEntity.class);
+
+        Root<DocumentEntity> myObjectRoot = criteriaQuery.from(DocumentEntity.class);
+        criteriaQuery.select(myObjectRoot).where(builder.equal(myObjectRoot.get("documentId"), docID));
+
+        Query<DocumentEntity> query =session.createQuery(criteriaQuery);
+        return query.getResultList() != null ? true : false;
     }
 
 

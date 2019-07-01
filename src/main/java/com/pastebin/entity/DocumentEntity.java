@@ -41,9 +41,17 @@ public class DocumentEntity {
     @JoinColumn(name = "")
     private UrlEntity uri;
 
-    @OneToOne
-    @JoinColumn(name = "directory_id")
-    private DirectoryEntity directoryEntity;
+    public DocumentEntity() {
+    }
+
+    public DocumentEntity(String documentId, boolean image, boolean file, String fileSize, String fileExtension, String directoryPath) {
+        this.documentId = documentId;
+        this.image = image;
+        this.file = file;
+        this.fileSize = fileSize;
+        this.fileExtension = fileExtension;
+        this.directoryPath = directoryPath;
+    }
 
     public long getId() {
         return id;
@@ -99,14 +107,6 @@ public class DocumentEntity {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public DirectoryEntity getDirectoryEntity() {
-        return directoryEntity;
-    }
-
-    public void setDirectoryEntity(DirectoryEntity directoryEntity) {
-        this.directoryEntity = directoryEntity;
     }
 
     public String getFileSize() {

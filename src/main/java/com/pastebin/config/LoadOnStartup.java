@@ -16,6 +16,7 @@ import com.pastebin.service.FileStorageService;
 import com.pastebin.service.ProjectPropertyService;
 import com.pastebin.service.provider.IStorage;
 import com.pastebin.util.CacheConstants;
+import com.pastebin.util.PropertyReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,16 +42,18 @@ public class LoadOnStartup {
     private final StorageFactory storageFactory;
     private final ProjectPropertyService propertyService;
     private final DirectoryService directoryService;
+    private final PropertyReader propertyReader;
     private Map<String, ICache> cacheMap;
     private Map<String, IStorage> storageMap;
 
     @Autowired
     public LoadOnStartup(CacheProviderFactory cacheProviderFactory, StorageFactory storageFactory,
-                         ProjectPropertyService propertyService, DirectoryService directoryService) {
+                         ProjectPropertyService propertyService, DirectoryService directoryService, PropertyReader propertyReader) {
         this.cacheProviderFactory = cacheProviderFactory;
         this.storageFactory = storageFactory;
         this.propertyService = propertyService;
         this.directoryService = directoryService;
+        this.propertyReader = propertyReader;
     }
 
     @PostConstruct
@@ -58,8 +61,8 @@ public class LoadOnStartup {
         initializeAndPopulateConfigJsonValues();
         loadPropertyValue();
         initializeDirectoryCache();
+        initializePropertyReader();
     }
-
 
     @Bean(name = "fileStorageService")
     public AbstractFileStorage getAbstractFileStorage(){
@@ -67,6 +70,7 @@ public class LoadOnStartup {
             initializeAndPopulateConfigJsonValues();
         return new FileStorageService(storageMap);
     }
+
 
     private void initializeAndPopulateConfigJsonValues() {
         try {
@@ -111,6 +115,10 @@ public class LoadOnStartup {
             directoryCache.insert(directoryEntity.getLocation(), "");
         }
         cacheManager.set(directoryCache);
+    }
+
+    private void initializePropertyReader() {
+        LOG.info(":: Initializing property file reader ::");
     }
 
     private static class InitialConfiguration{

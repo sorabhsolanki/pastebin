@@ -1,5 +1,6 @@
 package com.pastebin.executor.worker.impl;
 
+import com.pastebin.entity.DocumentEntity;
 import com.pastebin.executor.ExecutorTaskResult;
 import com.pastebin.executor.worker.ITask;
 import com.pastebin.repository.DocumentRepository;
@@ -49,6 +50,12 @@ public class SaveOnDirectory extends ITask {
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             LOG.info("File uploaded with file name : " + fileName);
+            boolean result = documentRepository.isDocIdPresent(getDocID());
+            if(result){
+                DocumentEntity documentEntity = new DocumentEntity(getDocID(), );
+            }
+
+
             executorTaskResult.insert(getReferenceId(), new ExecutorTaskResult.ResultDto(HttpStatus.OK,
                     "Successfully uploaded.", fileName, file.getSize(), ExecutorTaskResult.Storage.FILE));
 
