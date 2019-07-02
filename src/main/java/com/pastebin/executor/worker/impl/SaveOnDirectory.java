@@ -1,9 +1,12 @@
 package com.pastebin.executor.worker.impl;
 
+import com.pastebin.cache.CacheManager;
+import com.pastebin.cache.objects.impl.FileExtensionCache;
 import com.pastebin.entity.DocumentEntity;
 import com.pastebin.executor.ExecutorTaskResult;
 import com.pastebin.executor.worker.ITask;
 import com.pastebin.repository.DocumentRepository;
+import com.pastebin.util.FileExtEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -14,6 +17,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.Optional;
 
 /**
  */
@@ -21,6 +26,7 @@ public class SaveOnDirectory extends ITask {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaveOnDirectory.class);
 
+    private final CacheManager cacheManager = CacheManager.getInstance();
     private final ApplicationContext applicationContext;
     private final MultipartFile file;
     private final Path fileStorageLocation;
@@ -50,9 +56,18 @@ public class SaveOnDirectory extends ITask {
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             LOG.info("File uploaded with file name : " + fileName);
-            boolean result = documentRepository.isDocIdPresent(getDocID());
-            if(result){
-                DocumentEntity documentEntity = new DocumentEntity(getDocID(), );
+
+            FileExtensionCache fileExtensionCache = cacheManager.getCache(FileExtensionCache.class);
+            String extension = file.getOriginalFilename().split("\\.")[1];
+            FileExtEnum fileExtEnum = fileExtensionCache.checkForFileOrImage(extension);
+            Optional<List<DocumentEntity>> optionalDocumentEntityList = documentRepository.getDocument(getDocID());
+            if(optionalDocumentEntityList.isPresent()){
+                DocumentEntity documentEntity = optionalDocumentEntityList.get().get(0);
+                documentEntity.setFileType(fileExtEnum.getFileType());
+                documentEntity.setFileSize(file.getSize());
+                documentEntity.setFileExtension(extension);
+                documentEntity.setDirectoryPath(fileStorageLocation.toString());
+                documentRepository.update(documentEntity);
             }
 
 

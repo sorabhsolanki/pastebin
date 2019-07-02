@@ -8,7 +8,7 @@ import com.pastebin.cache.objects.AbstractInMemoryCache;
 /**
  */
 @Cache(name = "projectPropertyCache")
-public class ProjectPropertyCache extends AbstractInMemoryCache {
+public class ProjectPropertyCache extends AbstractInMemoryCache<String, String> {
 
     public ProjectPropertyCache(ICache iCache) {
         super(iCache);
@@ -21,7 +21,7 @@ public class ProjectPropertyCache extends AbstractInMemoryCache {
 
     @Override
     public String get(final String key){
-        return getCacheStorage().get(key);
+        return (String) getCacheStorage().get(key);
     }
 }
 

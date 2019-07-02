@@ -19,14 +19,11 @@ public class DocumentEntity {
     @Column(name = "doc_text")
     private String documentText;
 
-    @Column(name = "is_image")
-    private boolean image;
-
-    @Column(name = "is_file")
-    private boolean file;
+    @Column(name = "file_type")
+    private String fileType;
 
     @Column(name = "file_size")
-    private String fileSize;
+    private long fileSize;
 
     @Column(name = "file_extension")
     private String fileExtension;
@@ -44,10 +41,9 @@ public class DocumentEntity {
     public DocumentEntity() {
     }
 
-    public DocumentEntity(String documentId, boolean image, boolean file, String fileSize, String fileExtension, String directoryPath) {
+    public DocumentEntity(String documentId, String fileType, long fileSize, String fileExtension, String directoryPath) {
         this.documentId = documentId;
-        this.image = image;
-        this.file = file;
+        this.fileType = fileType;
         this.fileSize = fileSize;
         this.fileExtension = fileExtension;
         this.directoryPath = directoryPath;
@@ -77,20 +73,12 @@ public class DocumentEntity {
         this.documentText = documentText;
     }
 
-    public boolean isImage() {
-        return image;
+    public String getFileType() {
+        return fileType;
     }
 
-    public void setImage(boolean image) {
-        this.image = image;
-    }
-
-    public boolean isFile() {
-        return file;
-    }
-
-    public void setFile(boolean file) {
-        this.file = file;
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
     }
 
     public String getDirectoryPath() {
@@ -109,11 +97,11 @@ public class DocumentEntity {
         this.updatedAt = updatedAt;
     }
 
-    public String getFileSize() {
+    public long getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(String fileSize) {
+    public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
     }
 

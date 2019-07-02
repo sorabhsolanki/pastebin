@@ -5,10 +5,7 @@ import javax.persistence.*;
 /**
  */
 @Entity
-@NamedQueries({
-        @NamedQuery(name="ProjectPropertyEntity.findAll", query="select p from ProjectPropertyEntity p where p.active=:isActive")
-})
-@Table(name = "video_indexer_property")
+@Table(name = "project_property")
 public class ProjectPropertyEntity {
 
     @Id

@@ -15,7 +15,7 @@ public class MongoDBStorageProvider implements IStorage{
     private static final Logger LOG = LoggerFactory.getLogger(MongoDBStorageProvider.class);
 
     @Override
-    public String storeFile(MultipartFile file) {
+    public String storeFile(MultipartFile file, String docID) {
         LOG.warn("No definition provided for this method.");
         return null;
     }

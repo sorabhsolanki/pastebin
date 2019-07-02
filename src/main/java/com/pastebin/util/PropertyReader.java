@@ -1,21 +1,15 @@
 package com.pastebin.util;
 
 import com.pastebin.cache.CacheManager;
-import com.video.poc.play.cache.CacheManager;
-import com.video.poc.play.cache.PropertyCache;
-import com.video.poc.play.exception.GeneralException;
-import com.video.poc.play.model.Property;
-import com.video.poc.play.repository.PropertyRepository;
+import com.pastebin.cache.ICache;
+import com.pastebin.cache.objects.impl.FileExtensionCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * class for loading extension property from file_extension.properties file
@@ -31,7 +25,7 @@ public class PropertyReader {
         this.prop = new Properties();
     }
 
-    public void readPropertyFileAndLoadItInsideCache() {
+    public void readPropertyFileAndLoadItInsideCache(final ICache iCache) {
         if (prop.isEmpty()) {
             InputStream input = PropertyReader.class.getClassLoader().getResourceAsStream("file_extension.properties");
             try {
@@ -50,17 +44,25 @@ public class PropertyReader {
                 }
             }
         }
-        loadPropertiesInCache();
+        loadPropertiesInsideFileExtensionCache(iCache);
     }
 
 
-    private void loadPropertiesInCache() throws GeneralException {
-        PropertyCache propertyCache = new PropertyCache();
+    private void loadPropertiesInsideFileExtensionCache(final ICache iCache) {
+        FileExtensionCache fileExtensionCache = new FileExtensionCache(iCache);
         Enumeration stringEnumeration = prop.propertyNames();
         while (stringEnumeration.hasMoreElements()) {
             String key = stringEnumeration.nextElement().toString();
-            propertyCache.insert(key, prop.getProperty(key));
+            List<String> fileExtensionValues = new LinkedList<>();
+            StringTokenizer stringTokenizer = new StringTokenizer(prop.getProperty(key), ",");
+            while (stringTokenizer.hasMoreTokens()) {
+                fileExtensionValues.add(stringTokenizer.nextToken());
+            }
+            if (key.toLowerCase().equals(FileExtEnum.FILE.getFileType()))
+                fileExtensionCache.insert(FileExtEnum.FILE, fileExtensionValues);
+            else if(key.toLowerCase().equals(FileExtEnum.IMAGE.getFileType()))
+                fileExtensionCache.insert(FileExtEnum.IMAGE, fileExtensionValues);
         }
-        CacheManager.getInstance().set(propertyCache);
+        cacheManager.set(fileExtensionCache);
     }
 }

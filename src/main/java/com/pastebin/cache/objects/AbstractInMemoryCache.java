@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 /**
  */
-public abstract class AbstractInMemoryCache {
+public abstract class AbstractInMemoryCache<K, V> {
 
     private final ICache iCache;
 
@@ -14,11 +14,11 @@ public abstract class AbstractInMemoryCache {
         this.iCache = iCache;
     }
 
-    public HashMap<String, String> getCacheStorage() {
-        return (HashMap<String, String>) iCache.getCache();
+    public HashMap getCacheStorage() {
+        return (HashMap) iCache.getCache();
     }
 
-    public abstract void insert(String key, String value);
+    public abstract void insert(K key, V value);
 
-    public abstract String get(final String key);
+    public abstract V get(final K key);
 }

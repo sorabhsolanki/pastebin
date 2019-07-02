@@ -30,9 +30,8 @@ create table `document` (
   `document_id` varchar(40) NOT NULL,
   `url_id` int(10) unsigned NOT NULL,
   `doc_text` TEXT,
-  `is_image` TINYINT(1) NOT NULL,
-  `is_file` TINYINT(1) NOT NULL,
-  `file_size` int(3),
+  `file_type` varchar(8),  -- can be file or image
+  `file_size` int(5),
   `file_extension` varchar(5),
   `directory_location` varchar(200),
   `updated_at`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

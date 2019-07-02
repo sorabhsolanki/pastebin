@@ -15,7 +15,7 @@ import java.util.Set;
  *  locationName          ""         // no need to keep any value
  */
 @Cache(name = "directoryCache")
-public class DirectoryCache extends AbstractInMemoryCache {
+public class DirectoryCache extends AbstractInMemoryCache<String, String> {
 
     public DirectoryCache(ICache iCache) {
         super(iCache);
@@ -28,7 +28,7 @@ public class DirectoryCache extends AbstractInMemoryCache {
 
     @Override
     public String get(final String key){
-        return getCacheStorage().get(key);
+        return (String) getCacheStorage().get(key);
     }
 
     public int getSize(){

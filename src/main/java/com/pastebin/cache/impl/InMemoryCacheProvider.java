@@ -12,6 +12,6 @@ public class InMemoryCacheProvider implements ICache{
 
     @Override
     public Object getCache() {
-        return new HashMap<String, String>();
+        return new HashMap();
     }
 }

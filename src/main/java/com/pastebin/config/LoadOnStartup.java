@@ -61,7 +61,7 @@ public class LoadOnStartup {
         initializeAndPopulateConfigJsonValues();
         loadPropertyValue();
         initializeDirectoryCache();
-        initializePropertyReader();
+        initializeFileExtensionPropertyReader();
     }
 
     @Bean(name = "fileStorageService")
@@ -117,8 +117,9 @@ public class LoadOnStartup {
         cacheManager.set(directoryCache);
     }
 
-    private void initializePropertyReader() {
-        LOG.info(":: Initializing property file reader ::");
+    private void initializeFileExtensionPropertyReader() {
+        LOG.info(":: Initializing file extension in memory cache ::");
+        propertyReader.readPropertyFileAndLoadItInsideCache(cacheMap.get(CacheConstants.CACHE_IN_MEMORY));
     }
 
     private static class InitialConfiguration{
