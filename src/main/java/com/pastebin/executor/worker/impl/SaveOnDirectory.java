@@ -7,6 +7,7 @@ import com.pastebin.executor.ExecutorTaskResult;
 import com.pastebin.executor.worker.ITask;
 import com.pastebin.repository.DocumentRepository;
 import com.pastebin.util.FileExtEnum;
+import com.pastebin.util.TokenGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -41,11 +42,13 @@ public class SaveOnDirectory extends ITask {
     }
 
     /*
-       TODO:
        method will do the following operations:
        1. copy the content of multipart file inside the directory.
        2. check whether the provided docID is present inside the DB.
-       3. update information like is_file, is_image, file_size, file_extension, directory_location
+       3. update information like is_file, is_image, file_size, file_extension, directory_location if present
+       else insert.
+
+       TODO: make retry mechanism if insert failed.
      */
     @Override
     protected void process() {
@@ -61,19 +64,24 @@ public class SaveOnDirectory extends ITask {
             String extension = file.getOriginalFilename().split("\\.")[1];
             FileExtEnum fileExtEnum = fileExtensionCache.checkForFileOrImage(extension);
             Optional<List<DocumentEntity>> optionalDocumentEntityList = documentRepository.getDocument(getDocID());
+            DocumentEntity documentEntity = null;
             if(optionalDocumentEntityList.isPresent()){
-                DocumentEntity documentEntity = optionalDocumentEntityList.get().get(0);
+                documentEntity = optionalDocumentEntityList.get().get(0);
                 documentEntity.setFileType(fileExtEnum.getFileType());
                 documentEntity.setFileSize(file.getSize());
                 documentEntity.setFileExtension(extension);
                 documentEntity.setDirectoryPath(fileStorageLocation.toString());
                 documentRepository.update(documentEntity);
+            }else {
+                //make new docID and save it
+                final String docId = TokenGenerator.getToken();
+                documentEntity = new DocumentEntity(docId, fileExtEnum.getFileType(), file.getSize(),
+                        extension, fileStorageLocation.toString());
+                documentRepository.insert(documentEntity);
             }
-
-
             executorTaskResult.insert(getReferenceId(), new ExecutorTaskResult.ResultDto(HttpStatus.OK,
-                    "Successfully uploaded.", fileName, file.getSize(), ExecutorTaskResult.Storage.FILE));
-
+                    "Successfully uploaded.", fileName, file.getSize(), ExecutorTaskResult.Storage.FILE,
+                    documentEntity.getDocumentId()));
 
         } catch (IOException e) {
             executorTaskResult.insert(getReferenceId(), new ExecutorTaskResult.ResultDto(HttpStatus.INTERNAL_SERVER_ERROR,

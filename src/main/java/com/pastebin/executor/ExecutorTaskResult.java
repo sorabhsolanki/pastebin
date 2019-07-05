@@ -53,6 +53,7 @@ public class ExecutorTaskResult {
         String objectId;
         long size;
         Storage storage;
+        String docId;
 
         public ResultDto(HttpStatus httpStatus, String message, String objectId, long size, Storage storage) {
             this.httpStatus = httpStatus;
@@ -60,6 +61,15 @@ public class ExecutorTaskResult {
             this.objectId = objectId;
             this.size = size;
             this.storage = storage;
+        }
+
+        public ResultDto(HttpStatus httpStatus, String message, String objectId, long size, Storage storage, String docId) {
+            this.httpStatus = httpStatus;
+            this.message = message;
+            this.objectId = objectId;
+            this.size = size;
+            this.storage = storage;
+            this.docId = docId;
         }
 
         public ResultDto(HttpStatus httpStatus, String message) {

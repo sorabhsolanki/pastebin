@@ -60,5 +60,10 @@ public class DocumentRepository {
         session.update(documentEntity);
     }
 
+    public void insert(DocumentEntity documentEntity){
+        Session session = sessionFactory.getCurrentSession();
+        session.save(documentEntity);
+    }
+
 
 }

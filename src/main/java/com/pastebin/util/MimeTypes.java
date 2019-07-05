@@ -295,9 +295,6 @@ public class MimeTypes {
                 put1("jar", MIME_APPLICATION_JAVA_ARCHIVE);
             }};
     }
-    public static void main(String[] args) {
-        System.out.println(mimeTypeMapping.size());
-    }
 
     /**
      * Registers MIME type for provided extension. Existing extension type will be overriden.
