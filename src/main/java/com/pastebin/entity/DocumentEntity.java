@@ -28,6 +28,9 @@ public class DocumentEntity {
     @Column(name = "file_extension")
     private String fileExtension;
 
+    @Column(name = "file_name")
+    private String fileName;
+
     @Column(name = "directory_location")
     private String directoryPath;
 
@@ -41,10 +44,12 @@ public class DocumentEntity {
     public DocumentEntity() {
     }
 
-    public DocumentEntity(String documentId, String fileType, long fileSize, String fileExtension, String directoryPath) {
+    public DocumentEntity(String documentId, String fileType, long fileSize, String fileExtension, String fileName,
+                          String directoryPath) {
         this.documentId = documentId;
         this.fileType = fileType;
         this.fileSize = fileSize;
+        this.fileName = fileName;
         this.fileExtension = fileExtension;
         this.directoryPath = directoryPath;
     }
@@ -103,6 +108,14 @@ public class DocumentEntity {
 
     public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getFileExtension() {

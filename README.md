@@ -63,7 +63,8 @@ APIs
    2. This docId will be provided as input to pasteit/api/tag API from apiGateway for tagging the above uploaded details.
    
    **For case 1: If both APIs get called in parallel for a single user request, then how will they share the same DocID ?**
-   Sol: Make the docId upfront via UUID or custom generator, and then assign this docID to both the API request. The generation and assigning of docID can be done at API gateway.
-     Every API will first check whether this docID has been present at DB, if yes then fire update query else fire insert query. If insert query got failed then retry mechanism should be in place.  
+   Sol: Make the docId upfront via UUID or custom generator, and then assign this docID to both the API request. The generation and assigning of docID will be done at API gateway.
+     Every API will first check whether this docID has been present at DB, if yes then fire update query else fire insert query. 
+     If insert query got failed then api gateway will get the error response and then it will retry again.  
    
    

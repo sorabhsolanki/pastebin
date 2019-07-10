@@ -35,6 +35,30 @@ public class ExecutorTaskResult {
         if(resultDto.httpStatus == HttpStatus.INTERNAL_SERVER_ERROR){
             message = resultDto.message;
         }else {
+            //TODO: make proper downloadfile api path
+            fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path(resultDto.storage == Storage.DB ? "/video/downloadFileFromMongo/" : "/video/downloadFileFromDirectory/")
+                    .path(resultDto.objectId)
+                    .toUriString();
+        }
+
+        UploadFileResponse uploadFileResponse = new UploadFileResponse(resultDto.objectId, fileDownloadUri,
+                "application/octet-stream", resultDto.size, message);
+
+        return uploadFileResponse;
+    }
+
+    public UploadFileResponse getOtherInfoUploadResponse(final String taskReferenceId){
+        String message = "File is ready for download.";
+        String fileDownloadUri = "";
+        if(CONCURRENT_MAP.get(taskReferenceId) == null){
+            message = "Info is still in uploading phase. Please wait.";
+            return new UploadFileResponse(message);
+        }
+        ResultDto resultDto = CONCURRENT_MAP.get(taskReferenceId);
+        if(resultDto.httpStatus == HttpStatus.INTERNAL_SERVER_ERROR){
+            message = resultDto.message;
+        }else {
             fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path(resultDto.storage == Storage.DB ? "/video/downloadFileFromMongo/" : "/video/downloadFileFromDirectory/")
                     .path(resultDto.objectId)

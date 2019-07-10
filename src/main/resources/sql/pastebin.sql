@@ -33,6 +33,7 @@ create table `document` (
   `file_type` varchar(8),  -- can be file or image
   `file_size` int(5),
   `file_extension` varchar(5),
+  `file_name` varchar(100),
   `directory_location` varchar(200),
   `updated_at`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -47,8 +47,6 @@ public class SaveOnDirectory extends ITask {
        2. check whether the provided docID is present inside the DB.
        3. update information like is_file, is_image, file_size, file_extension, directory_location if present
        else insert.
-
-       TODO: make retry mechanism if insert failed.
      */
     @Override
     protected void process() {
@@ -70,12 +68,11 @@ public class SaveOnDirectory extends ITask {
                 documentEntity.setFileType(fileExtEnum.getFileType());
                 documentEntity.setFileSize(file.getSize());
                 documentEntity.setFileExtension(extension);
+                documentEntity.setFileName(fileName);
                 documentEntity.setDirectoryPath(fileStorageLocation.toString());
                 documentRepository.update(documentEntity);
             }else {
-                //make new docID and save it
-                final String docId = TokenGenerator.getToken();
-                documentEntity = new DocumentEntity(docId, fileExtEnum.getFileType(), file.getSize(),
+                documentEntity = new DocumentEntity(getDocID(), fileExtEnum.getFileType(), file.getSize(), fileName,
                         extension, fileStorageLocation.toString());
                 documentRepository.insert(documentEntity);
             }

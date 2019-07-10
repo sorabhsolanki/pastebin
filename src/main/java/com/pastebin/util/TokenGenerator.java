@@ -3,7 +3,7 @@ package com.pastebin.util;
 import java.util.Random;
 
 /**
- * Class for generating token. Token will be 4o char long, containing a-z, A-z and 0-9 digits
+ * Class for generating token. Token will be 40 char long, containing a-z, A-z and 0-9 digits
  */
 public class TokenGenerator {
 
