@@ -1,6 +1,7 @@
 package com.pastebin.handler;
 
-import com.pastebin.executor.ExecutorTaskResult;
+import com.pastebin.dto.OtherInfoDto;
+import com.pastebin.service.OtherInfoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,12 +10,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class OtherInfoHandler {
 
-    private final ExecutorTaskResult executorTaskResult;
+    private final OtherInfoStorageService otherInfoStorageService;
 
     @Autowired
-    public OtherInfoHandler(ExecutorTaskResult executorTaskResult) {
-        this.executorTaskResult = executorTaskResult;
+    public OtherInfoHandler(OtherInfoStorageService otherInfoStorageService) {
+        this.otherInfoStorageService = otherInfoStorageService;
     }
 
-
+    public String upload(final OtherInfoDto infoDto, final String docID) {
+        return otherInfoStorageService.storeInfo(infoDto, docID);
+    }
 }

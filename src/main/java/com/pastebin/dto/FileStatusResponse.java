@@ -2,22 +2,15 @@ package com.pastebin.dto;
 
 /**
  */
-public class FileStatusResponse {
+public class FileStatusResponse extends PasteItStatusResponse{
 
-    private String fileReferenceID;
     private String fileStatusUri;
     private String fileType;
-    private String message;
 
     public FileStatusResponse(String fileReferenceID, String fileStatusUri, String fileType, String message) {
-        this.fileReferenceID = fileReferenceID;
+        super(fileReferenceID, message);
         this.fileStatusUri = fileStatusUri;
         this.fileType = fileType;
-        this.message = message;
-    }
-
-    public String getFileReferenceID() {
-        return fileReferenceID;
     }
 
     public String getFileStatusUri() {
@@ -28,7 +21,4 @@ public class FileStatusResponse {
         return fileType;
     }
 
-    public String getMessage() {
-        return message;
-    }
 }

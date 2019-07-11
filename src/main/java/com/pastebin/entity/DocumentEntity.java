@@ -31,6 +31,13 @@ public class DocumentEntity {
     @Column(name = "file_name")
     private String fileName;
 
+    @Column(name = "bookmark_url")
+    private String bookmarkUrl;
+
+    @Column(name = "title")
+    private String title;
+
+
     @Column(name = "directory_location")
     private String directoryPath;
 
@@ -52,6 +59,13 @@ public class DocumentEntity {
         this.fileName = fileName;
         this.fileExtension = fileExtension;
         this.directoryPath = directoryPath;
+    }
+
+    public DocumentEntity(String documentId, String documentText, String title, String bookmarkUrl){
+        this.documentId = documentId;
+        this.documentText = documentText;
+        this.title = title;
+        this.bookmarkUrl = bookmarkUrl;
     }
 
     public long getId() {
@@ -116,6 +130,22 @@ public class DocumentEntity {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getBookmarkUrl() {
+        return bookmarkUrl;
+    }
+
+    public void setBookmarkUrl(String bookmarkUrl) {
+        this.bookmarkUrl = bookmarkUrl;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getFileExtension() {

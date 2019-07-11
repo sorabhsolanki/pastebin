@@ -2,8 +2,11 @@ package com.pastebin.controller;
 
 import com.pastebin.dto.FileStatusResponse;
 import com.pastebin.dto.OtherInfoDto;
+import com.pastebin.dto.OtherInfoStatusResponse;
 import com.pastebin.dto.UploadFileResponse;
+import com.pastebin.exception.GeneralException;
 import com.pastebin.handler.FileStorageHandler;
+import com.pastebin.handler.OtherInfoHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +25,12 @@ public class FileController {
     private static final Logger LOG = LoggerFactory.getLogger(FileController.class);
 
     private final FileStorageHandler fileStorageHandler;
+    private final OtherInfoHandler otherInfoHandler;
 
     @Autowired
-    public FileController(FileStorageHandler fileStorageHandler) {
+    public FileController(final FileStorageHandler fileStorageHandler, final OtherInfoHandler otherInfoHandler) {
         this.fileStorageHandler = fileStorageHandler;
+        this.otherInfoHandler = otherInfoHandler;
     }
 
     /*
@@ -46,10 +51,6 @@ public class FileController {
     }
 
 
-
-    // TODO: make api for pasteit/api/text  post
-    // Description : It takes text, url, title of the page and will insert it into DB.
-    // Response    : It will return a uri containing a threadRefId. Hitting it will return the docId if inserted successfully or WIP or exception.
     /*
     API for uploading of file, It takes multipart file and a docID. File get uploaded on a particular directory.
     In response, It will return a uri containing a threadRefId. Hitting it will return the docId if uploaded successfully or WIP or exception.
@@ -57,13 +58,13 @@ public class FileController {
     @RequestMapping(value = "/uploadOtherInfo", method = RequestMethod.POST)
     public ResponseEntity<?> uploadTextUrlTitle(@RequestBody OtherInfoDto infoDto, @RequestParam("docID") final String docID) {
         LOG.info(String.format("Request received for uploading of text url and title for docId %s", docID));
-        String referenceId = fileStorageHandler.upload(file, docID);
-        String fileStatusUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+        String referenceId = otherInfoHandler.upload(infoDto, docID);
+        String statusUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/checkStatus/")
                 .path(referenceId)
                 .toUriString();
-        FileStatusResponse statusResponse = new FileStatusResponse(referenceId, fileStatusUri,
-                "application/octet-stream", "Request has been accepted.");
+        OtherInfoStatusResponse statusResponse = new OtherInfoStatusResponse(referenceId, statusUri,
+                "Request has been accepted.");
         return ResponseEntity.status(HttpStatus.CREATED).body(statusResponse);
     }
 
@@ -71,12 +72,15 @@ public class FileController {
     API for checking the status of particular request.
      */
     @RequestMapping(value = "/checkStatus/{referenceId}", method = RequestMethod.GET)
-    public ResponseEntity<?> checkStatus(@PathVariable String referenceId) {
-        LOG.info(String.format("Request received for check status for referenceId %s", referenceId));
-        UploadFileResponse uploadFileResponse = fileStorageHandler.getUploadResponse(referenceId);
-        return ResponseEntity.status(HttpStatus.OK).body(uploadFileResponse);
+    public ResponseEntity<?> checkStatus(@PathVariable String referenceId, @RequestParam("infoType") final String infoType) {
+        LOG.info("Request received for check status for referenceId {} and info type {}", referenceId, infoType);
+        try {
+            UploadFileResponse uploadFileResponse = fileStorageHandler.getUploadResponse(referenceId, infoType);
+            return ResponseEntity.status(HttpStatus.OK).body(uploadFileResponse);
+        } catch (GeneralException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
     }
-
 
 
     // TODO : make API for pasteit/api/tag   post
