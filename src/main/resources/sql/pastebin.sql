@@ -14,7 +14,7 @@ create table `url` (
   `tiny_uri` varchar(7) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(`id`),
-  UNIQUE KEY `uri` (`uri`)
+  UNIQUE KEY `uri` (`tiny_uri`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- table for keeping all directory that can be used for holding files.
@@ -74,7 +74,7 @@ CREATE TABLE `auth_token` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 -- below tables will not going to use. As of now application only support guest user.
-/* CREATE TABLE `user_type` (
+CREATE TABLE `user_type` (
   `id`           INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `type`         VARCHAR(50)     NOT NULL,  -- type can be GUEST or LOGGEDIN
   `created_at`   TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -102,4 +102,4 @@ CREATE TABLE `user_url` (
   PRIMARY KEY (`id`),
   CONSTRAINT `user_url_user_fk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
   CONSTRAINT `user_url_url_fk_1` FOREIGN KEY (`url_id`) REFERENCES `url` (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8; */
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;

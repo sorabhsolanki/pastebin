@@ -2,6 +2,7 @@ package com.pastebin.executor.impl;
 
 import com.pastebin.executor.IExecutor;
 import com.pastebin.executor.worker.ITask;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @DependsOn("propertyReader")
+@Qualifier("executorImpl")
 public class ExecutorImpl extends IExecutor {
 
     @Override

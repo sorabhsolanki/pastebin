@@ -19,7 +19,6 @@ import java.util.Map;
 /**
  */
 @Component
-@DependsOn("loadOnStartup")
 public class StorageFactory {
 
     private final ApplicationContext applicationContext;

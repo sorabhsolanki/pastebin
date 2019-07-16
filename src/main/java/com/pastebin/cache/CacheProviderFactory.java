@@ -16,7 +16,6 @@ import java.util.Map;
 /**
  */
 @Component
-@DependsOn("loadOnStartup")
 public class CacheProviderFactory {
 
     private final ApplicationContext applicationContext;

@@ -19,12 +19,12 @@ import java.util.Properties;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories("com.video.indexer.aggregator.repo.repository")
+@EnableJpaRepositories("com.pastebin.repository")
 @PropertySource("classpath:db.properties")
 public class PersistenceContext {
 
     private static final String[] ENTITY_PACKAGES = {
-            "com.video.indexer.aggregator.repo.entity"
+            "com.pastebin.entity"
     };
 
     private static final String PROPERTY_NAME_DB_DRIVER_CLASS = "jdbc.driver";
@@ -60,9 +60,9 @@ public class PersistenceContext {
         sessionFactory.setDataSource(dataSource);
         sessionFactory.setPackagesToScan(ENTITY_PACKAGES);
         Properties hibernateProperties = new Properties();
-        hibernateProperties.put("hibernate.dialect", PROPERTY_NAME_HIBERNATE_DIALECT);
-        hibernateProperties.put("hibernate.show_sql", PROPERTY_NAME_HIBERNATE_SHOW_SQL);
-        hibernateProperties.put("hibernate.format_sql", PROPERTY_NAME_HIBERNATE_FORMAT_SQL);
+        hibernateProperties.put("hibernate.dialect", env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
+        hibernateProperties.put("hibernate.show_sql", env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
+        hibernateProperties.put("hibernate.format_sql", env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_FORMAT_SQL));
         sessionFactory.setHibernateProperties(hibernateProperties);
         return sessionFactory;
     }

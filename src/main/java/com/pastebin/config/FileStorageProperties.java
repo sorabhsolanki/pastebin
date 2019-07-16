@@ -2,6 +2,7 @@ package com.pastebin.config;
 
 import com.pastebin.cache.CacheManager;
 import com.pastebin.cache.objects.impl.DirectoryCache;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Random;
 /**
  */
 @Service
+@DependsOn("loadOnStartup")
 public class FileStorageProperties {
 
     private final CacheManager cacheManager;
