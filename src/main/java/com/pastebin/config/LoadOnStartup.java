@@ -43,23 +43,25 @@ public class LoadOnStartup {
     private final ProjectPropertyService propertyService;
     private final DirectoryService directoryService;
     private final PropertyReader propertyReader;
+    private final FileStorageProperties fileStorageProperties;
     private Map<String, ICache> cacheMap;
     private Map<String, IStorage> storageMap;
 
     @Autowired
     public LoadOnStartup(CacheProviderFactory cacheProviderFactory, StorageFactory storageFactory,
-                         ProjectPropertyService propertyService, DirectoryService directoryService, PropertyReader propertyReader) {
+                         ProjectPropertyService propertyService, DirectoryService directoryService, PropertyReader propertyReader,
+                         FileStorageProperties fileStorageProperties) {
         this.cacheProviderFactory = cacheProviderFactory;
         this.storageFactory = storageFactory;
         this.propertyService = propertyService;
         this.directoryService = directoryService;
         this.propertyReader = propertyReader;
+        this.fileStorageProperties = fileStorageProperties;
     }
 
     @PostConstruct
     public void init() {
-        initializeAndPopulateConfigJsonValues();
-        loadPropertyValue();
+        initializeAndPopulateConfigJsonValuesAndLoadPropertyValueCache();
         initializeDirectoryCache();
         initializeFileExtensionPropertyReader();
     }
@@ -67,12 +69,12 @@ public class LoadOnStartup {
     @Bean(name = "fileStorageService")
     public AbstractFileStorage getAbstractFileStorage(){
         if(storageMap == null)
-            initializeAndPopulateConfigJsonValues();
+            initializeAndPopulateConfigJsonValuesAndLoadPropertyValueCache();
         return new FileStorageService(storageMap);
     }
 
 
-    private void initializeAndPopulateConfigJsonValues() {
+    private void initializeAndPopulateConfigJsonValuesAndLoadPropertyValueCache() {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             InputStream inputStream = LoadOnStartup.class.getClassLoader().getResourceAsStream("InitialConfiguration.json");
@@ -84,6 +86,7 @@ public class LoadOnStartup {
             fillNames(cacheList, enabledCaches);
             fillNames(fileStorageList, enabledStorageServices);
             cacheMap = cacheProviderFactory.initializeCacheProviders(enabledCaches);
+            loadPropertyValue();
             storageMap = storageFactory.initializeStorageProviders(enabledStorageServices);
         } catch (IOException | GeneralException e) {
             LOG.error("Error while reading InitialConfiguration json file. {} ", e.getMessage());
@@ -115,6 +118,7 @@ public class LoadOnStartup {
             directoryCache.insert(directoryEntity.getLocation(), "");
         }
         cacheManager.set(directoryCache);
+        fileStorageProperties.initializeLocations();
     }
 
     private void initializeFileExtensionPropertyReader() {

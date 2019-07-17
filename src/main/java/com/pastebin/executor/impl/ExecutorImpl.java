@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 /**
  */
 @Service
-@DependsOn("propertyReader")
+@DependsOn({"propertyReader","loadOnStartup"})
 @Qualifier("executorImpl")
 public class ExecutorImpl extends IExecutor {
 

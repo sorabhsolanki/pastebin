@@ -37,7 +37,7 @@ public class ProjectPropertyRepository {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<ProjectPropertyEntity> criteriaQuery = builder.createQuery(ProjectPropertyEntity.class);
         Root<ProjectPropertyEntity> myObjectRoot = criteriaQuery.from(ProjectPropertyEntity.class);
-        criteriaQuery.select(myObjectRoot).where(builder.equal(myObjectRoot.get("isActive"), isActive));
+        criteriaQuery.select(myObjectRoot).where(builder.equal(myObjectRoot.get("active"), isActive));
 
         Query<ProjectPropertyEntity> query =session.createQuery(criteriaQuery);
         List<ProjectPropertyEntity> list = query.getResultList();

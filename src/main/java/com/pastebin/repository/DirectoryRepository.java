@@ -38,6 +38,9 @@ public class DirectoryRepository {
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<DirectoryEntity> criteriaQuery = builder.createQuery(DirectoryEntity.class);
+
+        Root<DirectoryEntity> variableRoot = criteriaQuery.from(DirectoryEntity.class);
+        criteriaQuery.select(variableRoot);
         Query<DirectoryEntity> query =session.createQuery(criteriaQuery);
 
         List<DirectoryEntity> list = query.getResultList();
