@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -23,23 +25,17 @@ import java.util.List;
 @Transactional
 public class ProjectPropertyRepository {
 
-    private final SessionFactory sessionFactory;
-
-    @Autowired
-    public ProjectPropertyRepository(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    @PersistenceContext(unitName = "entityManagerFactory")
+    private EntityManager em;
 
     public List<ProjectPropertyEntity> getAll(boolean isActive){
 
-        Session session = sessionFactory.getCurrentSession();
-
-        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<ProjectPropertyEntity> criteriaQuery = builder.createQuery(ProjectPropertyEntity.class);
         Root<ProjectPropertyEntity> myObjectRoot = criteriaQuery.from(ProjectPropertyEntity.class);
         criteriaQuery.select(myObjectRoot).where(builder.equal(myObjectRoot.get("active"), isActive));
 
-        Query<ProjectPropertyEntity> query =session.createQuery(criteriaQuery);
+        TypedQuery<ProjectPropertyEntity> query = em.createQuery(criteriaQuery);
         List<ProjectPropertyEntity> list = query.getResultList();
         return CollectionUtils.isEmpty(list) ? Collections.emptyList() : list;
     }

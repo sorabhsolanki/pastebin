@@ -1,14 +1,12 @@
 package com.pastebin.repository;
 
 import com.pastebin.entity.DirectoryEntity;
-import com.pastebin.entity.ProjectPropertyEntity;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -23,26 +21,24 @@ import java.util.List;
 @Transactional
 public class DirectoryRepository {
 
-    private final SessionFactory sessionFactory;
 
-    @Autowired
-    public DirectoryRepository(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    @PersistenceContext(unitName = "entityManagerFactory")
+    private EntityManager em;
+
 
     /*
      method for get all directory locations from DB, these location will be used for holding files.
      */
     public List<DirectoryEntity> getAll(){
 
-        Session session = sessionFactory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
+
+        CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<DirectoryEntity> criteriaQuery = builder.createQuery(DirectoryEntity.class);
 
         Root<DirectoryEntity> variableRoot = criteriaQuery.from(DirectoryEntity.class);
         criteriaQuery.select(variableRoot);
-        Query<DirectoryEntity> query =session.createQuery(criteriaQuery);
 
+        TypedQuery<DirectoryEntity> query = em.createQuery(criteriaQuery);
         List<DirectoryEntity> list = query.getResultList();
         return CollectionUtils.isEmpty(list) ? Collections.emptyList() : list;
     }

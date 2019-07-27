@@ -1,5 +1,6 @@
 package com.pastebin.cache.objects.impl;
 
+import com.pastebin.annotation.Cache;
 import com.pastebin.cache.ICache;
 import com.pastebin.cache.objects.AbstractInMemoryCache;
 import com.pastebin.util.FileExtEnum;
@@ -9,6 +10,7 @@ import java.util.List;
 
 /**
  */
+@Cache(name = "fileExtensionCache")
 public class FileExtensionCache extends AbstractInMemoryCache<FileExtEnum, List<String>> {
 
     public FileExtensionCache(ICache iCache) {

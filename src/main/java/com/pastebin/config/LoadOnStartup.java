@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 /**
  */
 @Component
+@Configuration
 public class LoadOnStartup {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoadOnStartup.class);
@@ -67,7 +69,7 @@ public class LoadOnStartup {
     }
 
     @Bean(name = "fileStorageService")
-    public AbstractFileStorage getAbstractFileStorage(){
+    public FileStorageService getAbstractFileStorage(){
         if(storageMap == null)
             initializeAndPopulateConfigJsonValuesAndLoadPropertyValueCache();
         return new FileStorageService(storageMap);

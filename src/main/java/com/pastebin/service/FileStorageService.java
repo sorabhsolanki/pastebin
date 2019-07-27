@@ -9,7 +9,6 @@ import java.util.Map;
 
 /**
  */
-@Service
 public class FileStorageService extends AbstractFileStorage{
 
     public FileStorageService(Map<String, IStorage> storageMap) {

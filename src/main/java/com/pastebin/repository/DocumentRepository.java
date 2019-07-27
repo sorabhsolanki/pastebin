@@ -7,6 +7,9 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -22,47 +25,40 @@ import java.util.Optional;
 @Transactional
 public class DocumentRepository {
 
-    private final SessionFactory sessionFactory;
-
-    @Autowired
-    public DocumentRepository(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    @PersistenceContext(unitName = "entityManagerFactory")
+    private EntityManager em;
 
     public boolean isDocIdPresent(final String docID){
-        Session session = sessionFactory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<DocumentEntity> criteriaQuery = builder.createQuery(DocumentEntity.class);
 
         Root<DocumentEntity> myObjectRoot = criteriaQuery.from(DocumentEntity.class);
         criteriaQuery.select(myObjectRoot).where(builder.equal(myObjectRoot.get("documentId"), docID));
 
-        Query<DocumentEntity> query =session.createQuery(criteriaQuery);
+
+        TypedQuery<DocumentEntity> query = em.createQuery(criteriaQuery);
         return query.getResultList() != null ? true : false;
     }
 
     public Optional<List<DocumentEntity>> getDocument(final String docID){
-        Session session = sessionFactory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<DocumentEntity> criteriaQuery = builder.createQuery(DocumentEntity.class);
 
         Root<DocumentEntity> myObjectRoot = criteriaQuery.from(DocumentEntity.class);
         criteriaQuery.select(myObjectRoot).where(builder.equal(myObjectRoot.get("documentId"), docID));
 
-        Query<DocumentEntity> query =session.createQuery(criteriaQuery);
+        TypedQuery<DocumentEntity> query = em.createQuery(criteriaQuery);
         List<DocumentEntity> documentEntityList = query.getResultList();
 
         return Optional.of(documentEntityList);
     }
 
     public void update(DocumentEntity documentEntity){
-        Session session = sessionFactory.getCurrentSession();
-        session.update(documentEntity);
+        em.persist(documentEntity);
     }
 
     public void insert(DocumentEntity documentEntity){
-        Session session = sessionFactory.getCurrentSession();
-        session.save(documentEntity);
+        em.persist(documentEntity);
     }
 
 
